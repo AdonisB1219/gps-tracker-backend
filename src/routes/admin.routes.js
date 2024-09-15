@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import {
+  getAdmins,
   signUpAdmin,
   updateAdmin,
+  getAdmin
 } from '../controller/index.js';
 import {
   protectWithJwt,
@@ -10,10 +12,13 @@ import {
 const router = Router();
 
 router.route('/')
-    .post([protectWithJwt], signUpAdmin);
+    .post([protectWithJwt], signUpAdmin)
+    .get([protectWithJwt], getAdmins)
+  
 
 router.route('/:id')
-    .put([protectWithJwt], updateAdmin);
+    .put([protectWithJwt], updateAdmin)
+    .get([protectWithJwt], getAdmin)
 
 
 export default router;
