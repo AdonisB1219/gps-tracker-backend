@@ -4,52 +4,24 @@ import { prisma } from '../db/mysql/index.js';
 import { genJWT } from '../helpers/index.js';
 import { createError } from '../utils/error.js';
 
-/* export const signUp = async (req, res, next) => {
-  try {
-    const { email, password, telefono, nombre, identificacion } =
-      req.body;
-
-    const hashedPassword = await bcryptjs.hash(password, 10);
-
-    
-    const user = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        telefono,
-        nombre,
-        identificacion,
-        // es_admin: true,
-      },
-    });
-    delete user.password;
-
-    res
-      .status(201)
-      .json({ ok: true, message: 'Usuario creado con éxito!', user });
-  } catch (error) {
-    next(error);
-  }
-}; */
-
 export const login = async (req, res, next) => {
   const { email, password } = req.body;
 
 
   try {
-    const user = await prisma.user.findFirst({
+    const admin = await prisma.administrator.findFirst({
       where: {
         email: email
       },
     });
-    if (!user)
+    if (!admin)
       return next(
         createError(
           401,
           'Hubo un problema al iniciar sesión. Verifique su correo electrónico y contraseña o cree una cuenta.'
         )
       );
-    const matchPass = await bcryptjs.compare(password, user?.password);
+    const matchPass = await bcryptjs.compare(password, admin?.password);
     if (!matchPass)
       return next(
         createError(
@@ -58,16 +30,16 @@ export const login = async (req, res, next) => {
         )
       );
 
-    delete user.password;
+    delete admin.password;
 
     // validate if is veterinarian, tutor or admin
 
     const userBody = {
-      ...user
+      ...admin
     };
 
     // Gen JWT
-    const token = await genJWT(user.id);
+    const token = await genJWT(admin.id);
 
     res.status(200).json({
       ok: true,
@@ -94,25 +66,3 @@ export const renewJwt = async (req, res) => {
     user: authenticatedUser,
   });
 };
-
-/* export const validateEmail = async (req, res, next) => {
-  const { email } = req.query;
-
-  try {
-    const user = await prisma.user.findFirst({
-      where: {
-        email,
-      },
-    });
-
-    if (user) {
-      return res
-        .status(400)
-        .json({ ok: false, message: 'Correo ya registrado' });
-    }
-
-    res.status(200).json({ ok: false, message: 'Correo no registrado' });
-  } catch (error) {
-    next(error);
-  }
-}; */

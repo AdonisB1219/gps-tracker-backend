@@ -12,7 +12,7 @@ export const genJWT = id => {
       (err, token) => {
         if (err) {
           console.log(err);
-          reject('Could not generate token!');
+          reject(Error('Could not generate token!'));
         }
 
         resolve(token);

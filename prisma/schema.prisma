@@ -8,14 +8,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Cliente {
+model Administrator {
+  id          Int @id @default(autoincrement())
+  email       String @unique
+  password    String
+}
+
+model Client {
     id          Int @id @default(autoincrement())
-    nombre      String
-    provincia   String
-    ciudad      String
-    direccion   String
-    celular     String  
-    correo      String
+    name        String
+    province    String
+    city        String
+    address     String
+    phone       String  
+    email       String @unique
     instagram   String
     x           String
     cedula      String
@@ -27,6 +33,6 @@ model Cliente {
 model Gps {
     id          Int @id @default(autoincrement())
     serial      String
-    cliente     Cliente @relation(fields: [clienteId], references: [id], onDelete: Cascade)
-    clienteId      Int
+    client      Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+    clientId      Int
 }
