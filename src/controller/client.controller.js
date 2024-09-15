@@ -145,3 +145,34 @@ export const updateClient = async (req, res, next) => {
         next(error);
       }
 };
+
+export const deleteClient = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        const client = await prisma.client.findUnique({
+            where: {
+                id: parseInt(id),
+            },
+        });
+
+        if (!client) {
+            return res.status(404).json({
+                ok: false,
+                message: 'Cliente no encontrado',
+            });
+        }
+
+        await prisma.client.delete({
+            where: {
+                id: parseInt(id)
+            },
+        });
+
+        res.status(200).json({
+            ok: true,
+            message: 'Cliente eliminado con éxito!',
+        });
+    } catch (error) {
+        next(error);
+    }
+};

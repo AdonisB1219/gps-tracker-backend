@@ -3,7 +3,8 @@ import {
   getAdmins,
   signUpAdmin,
   updateAdmin,
-  getAdmin
+  getAdmin,
+  deleteAdmin
 } from '../controller/index.js';
 import {
   protectWithJwt,
@@ -19,6 +20,7 @@ router.route('/')
 router.route('/:id')
     .put([protectWithJwt], updateAdmin)
     .get([protectWithJwt], getAdmin)
+    .delete([protectWithJwt], deleteAdmin)
 
 
 export default router;

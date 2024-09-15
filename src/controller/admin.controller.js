@@ -155,3 +155,35 @@ export const updateAdmin = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteAdmin = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        const administrator = await prisma.administrator.findUnique({
+            where: {
+                id: parseInt(id),
+            },
+        });
+
+        if (!administrator) {
+            return res.status(404).json({
+                ok: false,
+                message: 'Administrador no encontrado',
+            });
+        }
+
+        await prisma.administrator.delete({
+            where: {
+                id: parseInt(id)
+            },
+        });
+
+        res.status(200).json({
+            ok: true,
+            message: 'Administrador eliminado con éxito!',
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+

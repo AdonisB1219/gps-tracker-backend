@@ -1,5 +1,4 @@
 import { prisma } from "../db/mysql/index.js";
-import bcryptjs from "bcryptjs";
 
 export const signUpGps = async (req, res, next) => {
   try {
@@ -112,8 +111,6 @@ export const getGps = async (req, res, next) => {
     }
   };
 
-
-
 export const updateGps = async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -147,4 +144,35 @@ export const updateGps = async (req, res, next) => {
       } catch (error) {
         next(error);
       }
+};
+
+export const deleteGps = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        const gps = await prisma.gps.findUnique({
+            where: {
+                id: parseInt(id),
+            },
+        });
+
+        if (!gps) {
+            return res.status(404).json({
+                ok: false,
+                message: 'Gps no encontrado',
+            });
+        }
+
+        await prisma.gps.delete({
+            where: {
+                id: parseInt(id)
+            },
+        });
+
+        res.status(200).json({
+            ok: true,
+            message: 'Gps eliminado con éxito!',
+        });
+    } catch (error) {
+        next(error);
+    }
 };
