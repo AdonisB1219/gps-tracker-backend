@@ -1,0 +1,32 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "windows"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Cliente {
+    id          Int @id @default(autoincrement())
+    nombre      String
+    provincia   String
+    ciudad      String
+    direccion   String
+    celular     String  
+    correo      String
+    instagram   String
+    x           String
+    cedula      String
+    ruc         String
+    razon_social    String
+    gps         Gps[]
+}
+
+model Gps {
+    id          Int @id @default(autoincrement())
+    serial      String
+    cliente     Cliente @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+    clienteId      Int
+}
