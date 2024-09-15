@@ -59,13 +59,13 @@ export const getAdmins = async (req, res, next) => {
 
     const admins = await prisma.administrator.findMany({
       where: filterOptions,
-      paginationOptions,
+      ...paginationOptions,
       select: {
-        id,
-        email
-      }
+        id: true,
+        email: true,
+      },
     });
-
+    
     if (limit){
         const totalAdmins = await prisma.administrator.count({
             where: filterOptions,
