@@ -60,6 +60,10 @@ export const getAdmins = async (req, res, next) => {
     const admins = await prisma.administrator.findMany({
       where: filterOptions,
       paginationOptions,
+      select: {
+        id,
+        email
+      }
     });
 
     if (limit){

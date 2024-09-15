@@ -19,7 +19,7 @@ import { createAdminUser } from './utils/create-admin.js';
 // Initializations
 const app = express();
 
-app.use(cors(options))
+app.use(cors())
 
 // Create admin user if it doesn't exist
 createAdminUser();
