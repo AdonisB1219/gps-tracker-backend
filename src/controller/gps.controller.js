@@ -66,7 +66,7 @@ export const getGps = async (req, res, next) => {
         
             const baseUrl = req.protocol + "://" + req.get("host") + req.originalUrl;
   
-            res.status(200).json({
+            return res.status(200).json({
               ok: true,
               count: totalAdmins,
               next:
