@@ -47,18 +47,15 @@ export const getGps = async (req, res, next) => {
         }
       : {};
   
-      const paginationOptions = limit? {
-          skip: skip,
-          take: limit,
-      } :
-      undefined;
-  
-      const gps = await prisma.gps.findMany({
-        where: filterOptions,
-        paginationOptions,
-      });
   
       if (limit){
+
+        const gps = await prisma.gps.findMany({
+          where: filterOptions,
+          skip: skip,
+          take: limit,
+        });
+      
           const totalAdmins = await prisma.gps.count({
               where: filterOptions,
             });
@@ -77,7 +74,11 @@ export const getGps = async (req, res, next) => {
             });
       }
   
-  
+      const gps = await prisma.gps.findMany({
+        where: filterOptions,
+      });
+
+
       res.status(200).json({
   
         data: gps,

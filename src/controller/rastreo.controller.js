@@ -65,6 +65,21 @@ export const getRastreo = async (req, res, next) => {
         where: filterOptions,
         skip: skip,
         take: limit,
+        include: {
+          client: {
+            select: {
+              nombre: true,
+              apellidos: true,
+              email: true
+            }
+          },
+          gps: {
+            select: {
+              serial: true,
+              bodega: true
+            }
+          },
+        }
       });
       const totalAdmins = await prisma.rastreo.count({
         where: filterOptions,
@@ -88,6 +103,21 @@ export const getRastreo = async (req, res, next) => {
     }
     const rastreo = await prisma.rastreo.findMany({
       where: filterOptions,
+      include: {
+        client: {
+          select: {
+            nombre: true,
+            apellidos: true,
+            email: true
+          }
+        },
+        gps: {
+          select: {
+            serial: true,
+            bodega: true
+          }
+        },
+      }
     });
 
     res.status(200).json({
