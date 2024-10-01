@@ -1,57 +1,51 @@
 import { prisma } from "../db/mysql/index.js";
 
-export const signUpClient = async (req, res, next) => {
+export const signUpRastreo = async (req, res, next) => {
   try {
     const {
-      nombre,
-      apellidos,
-      provincia,
-      ciudad,
-      email,
-      instagram,
-      x,
-      cedula,
-      ruc,
-      razonSocial,
+      clientId,
+      gpsId,
+      referencia,
+      celular,
+      saldo,
+      fechaInicio,
+      fechaFin,
     } = req.body;
 
     // validate emial
-    const userExists = await prisma.client.findFirst({
+    const gpsExists = await prisma.rastreo.findFirst({
       where: {
-        email,
+        gpsId,
       },
     });
-    if (userExists) {
+    if (gpsExists) {
       return res.status(400).json({
         ok: false,
-        message: "El correo ya ha sido registrado",
+        message: "El gps ya ha sido registrado",
       });
     }
 
-    const user = await prisma.client.create({
+    const rastreo = await prisma.rastreo.create({
       data: {
-        nombre,
-        apellidos,
-        provincia,
-        ciudad,
-        email,
-        instagram,
-        x,
-        cedula,
-        ruc,
-        razon_social: razonSocial,
+        clientId,
+        gpsId,
+        referencia,
+        celular,
+        saldo,
+        fecha_inicio: fechaInicio,
+        fecha_fin: fechaFin,
       },
     });
 
     res
       .status(201)
-      .json({ ok: true, message: "Cliente creado con éxito!", user });
+      .json({ ok: true, message: "Rastreo creado con éxito!", rastreo });
   } catch (error) {
     next(error);
   }
 };
 
-export const getClients = async (req, res, next) => {
+export const getRastreo = async (req, res, next) => {
   try {
     const page = +req.query.page;
     const limit = +req.query.page_size;
@@ -60,22 +54,19 @@ export const getClients = async (req, res, next) => {
 
     const filterOptions = search
       ? {
-          nombre: {
+          name: {
             contains: search,
           },
         }
       : {};
 
-
     if (limit) {
-
-      const clients = await prisma.client.findMany({
+      const rastreo = await prisma.rastreo.findMany({
         where: filterOptions,
-        skip,
-        take: limit
+        skip: skip,
+        take: limit,
       });
-
-      const totalAdmins = await prisma.client.count({
+      const totalAdmins = await prisma.rastreo.count({
         where: filterOptions,
       });
       const totalPages = Math.ceil(totalAdmins / limit);
@@ -92,116 +83,107 @@ export const getClients = async (req, res, next) => {
         previous:
           page > 1 ? `${baseUrl}?page=${page - 1}&limit=${limit}` : null,
         numero_paginas: totalPages,
-        data: clients,
+        data: rastreo,
       });
     }
-
-    const clients = await prisma.client.findMany({
+    const rastreo = await prisma.rastreo.findMany({
       where: filterOptions,
     });
 
     res.status(200).json({
-      data: clients,
+      data: rastreo,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const getClient = async (req, res, next) => {
+export const getOneRastreo = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const client = await prisma.client.findUnique({
+    const rastreo = await prisma.rastreo.findUnique({
       where: {
         id: parseInt(id),
       },
     });
 
-    if (!client) {
+    if (!rastreo) {
       return res.status(404).json({
         ok: false,
-        message: "Cliente no encontrado",
+        message: "Rastreo no encontrado",
       });
     }
 
-    res.status(200).json(client);
+    res.status(200).json(rastreo);
   } catch (error) {
     next(error);
   }
 };
 
-export const updateClient = async (req, res, next) => {
+export const updateRastreo = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const {
-      nombre,
-      apellidos,
-      provincia,
-      ciudad,
-      email,
-      instagram,
-      x,
-      cedula,
-      ruc,
-      razonSocial,
-    } = req.body;
+    const { clientId,
+      gpsId,
+      referencia,
+      celular,
+      saldo,
+      fechaInicio,
+      fechaFin, } = req.body;
 
     // validate emial
-    const userExists = await prisma.client.findFirst({
+    const gpsExists = await prisma.rastreo.findFirst({
       where: {
         id: parseInt(id),
       },
     });
-    if (!userExists) {
+    if (!gpsExists) {
       return res.status(400).json({
         ok: false,
-        message: "Cliente no encontrado",
+        message: "Rastreo no encontrado",
       });
     }
 
-    const user = await prisma.client.update({
+    const gps = await prisma.rastreo.update({
       where: {
         id: parseInt(id),
       },
       data: {
-        nombre,
-        apellidos,
-        provincia,
-        ciudad,
-        email,
-        instagram,
-        x,
-        cedula,
-        ruc,
-        razon_social: razonSocial,
+        clientId,
+        gpsId,
+        referencia,
+        celular,
+        saldo,
+        fecha_inicio: fechaInicio,
+        fecha_fin: fechaFin,
       },
     });
 
     res
       .status(201)
-      .json({ ok: true, message: "Cliente actualizado con éxito!", user });
+      .json({ ok: true, message: "rastreo actualizado con éxito!", gps });
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteClient = async (req, res, next) => {
+export const deleteRastreo = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const client = await prisma.client.findUnique({
+    const rastreo = await prisma.rastreo.findUnique({
       where: {
         id: parseInt(id),
       },
     });
 
-    if (!client) {
+    if (!rastreo) {
       return res.status(404).json({
         ok: false,
-        message: "Cliente no encontrado",
+        message: "Rastreo no encontrado",
       });
     }
 
-    await prisma.client.delete({
+    await prisma.rastreo.delete({
       where: {
         id: parseInt(id),
       },
@@ -209,7 +191,7 @@ export const deleteClient = async (req, res, next) => {
 
     res.status(200).json({
       ok: true,
-      message: "Cliente eliminado con éxito!",
+      message: "Rastreo eliminado con éxito!",
     });
   } catch (error) {
     next(error);

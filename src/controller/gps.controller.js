@@ -2,7 +2,7 @@ import { prisma } from "../db/mysql/index.js";
 
 export const signUpGps = async (req, res, next) => {
   try {
-    const { serial, clientId } = req.body;
+    const { serial, modelo, lote, bodega } = req.body;
 
     // validate emial
     const gpsExists = await prisma.gps.findFirst({
@@ -20,13 +20,13 @@ export const signUpGps = async (req, res, next) => {
     const gps = await prisma.gps.create({
       data: {
         serial,
-        clientId
+        modelo, lote, bodega
       },
     });
 
     res
       .status(201)
-      .json({ ok: true, message: "Usuario creado con éxito!", gps });
+      .json({ ok: true, message: "Gps creado con éxito!", gps });
   } catch (error) {
     next(error);
   }
@@ -114,7 +114,7 @@ export const getGps = async (req, res, next) => {
 export const updateGps = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { serial, clientId } = req.body;
+        const { serial, modelo, lote, bodega } = req.body;
     
         // validate emial
         const gpsExists = await prisma.gps.findFirst({
@@ -134,13 +134,13 @@ export const updateGps = async (req, res, next) => {
                 id: parseInt(id),
               },
           data: {
-            serial, clientId 
+            serial, modelo, lote, bodega 
         },
         });
     
         res
           .status(201)
-          .json({ ok: true, message: "Usuario actualizado con éxito!", gps });
+          .json({ ok: true, message: "Gps actualizado con éxito!", gps });
       } catch (error) {
         next(error);
       }

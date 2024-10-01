@@ -18,6 +18,10 @@ export const createAdminUser = async () => {
 
       const user = await prisma.administrator.create({
         data: {
+          nombre: "admin",
+          identificacion: "identificacion",
+          direccion: "direccion",
+          telefono: "telefono",
           email: 'admin@admin.com',
           password: hashedPassword,
         },

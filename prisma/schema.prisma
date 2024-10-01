@@ -10,29 +10,47 @@ datasource db {
 
 model Administrator {
   id          Int @id @default(autoincrement())
+  nombre      String
+  identificacion  String
+  direccion    String
+  telefono     String
   email       String @unique
   password    String
 }
 
 model Client {
     id          Int @id @default(autoincrement())
-    name        String
-    province    String
-    city        String
-    address     String
-    phone       String  
+    nombre      String
+    apellidos   String
+    provincia   String
+    ciudad      String
     email       String @unique
     instagram   String
     x           String
     cedula      String
     ruc         String
     razon_social    String
-    gps         Gps[]
+    rastreo         Rastreo[]
 }
 
 model Gps {
     id          Int @id @default(autoincrement())
+    modelo      String
+    lote        String
+    bodega      String
     serial      String
-    client      Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+    rastreo     Rastreo[]
+}
+
+model Rastreo {
+  id          Int @id @default(autoincrement())
+    client      Client @relation(fields: [clientId], references: [id])
     clientId      Int
+    gps         Gps @relation(fields: [gpsId], references: [id])
+    gpsId       Int
+    referencia  String
+    celular     String
+    saldo       Float
+    fecha_inicio  DateTime
+    fecha_fin     DateTime
 }

@@ -3,7 +3,7 @@ import bcryptjs from "bcryptjs";
 
 export const signUpAdmin = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, nombre, identificacion, direccion, telefono, password } = req.body;
 
     // validate emial
     const userExists = await prisma.administrator.findFirst({
@@ -22,6 +22,10 @@ export const signUpAdmin = async (req, res, next) => {
 
     const user = await prisma.administrator.create({
       data: {
+        nombre,
+        identificacion,
+        direccion,
+        telefono,
         email,
         password: hashedPassword,
       },
@@ -62,8 +66,12 @@ export const getAdmins = async (req, res, next) => {
       ...paginationOptions,
       select: {
         id: true,
+        nombre: true, 
+        identificacion: true,
         email: true,
-      },
+        telefono: true,
+        direccion: true
+      }
     });
     
     if (limit){

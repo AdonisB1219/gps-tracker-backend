@@ -13,6 +13,7 @@ import {
   authRouter,
   clientRouter,
   gpsRouter,
+  rastreoRouter
 } from './routes/index.js';
 import { createAdminUser } from './utils/create-admin.js';
 
@@ -32,6 +33,8 @@ app.use('/auth', authRouter);
 app.use('/admin', adminRouter);
 app.use('/client', clientRouter);
 app.use('/gps', gpsRouter);
+app.use('/rastreo', rastreoRouter);
+
 
 
 app.use(notFound);
