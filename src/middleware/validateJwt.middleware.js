@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 
 import { SECRETORPRIVATEKEY_JWT } from '../config/index.js';
 import { prisma } from '../db/mysql/index.js';
-import { createError } from '../utils/error.js';
 
 export const protectWithJwt = async (req, res, next) => {
   const bearerToken = req.header('Authorization');
