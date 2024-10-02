@@ -9,6 +9,8 @@ neonConfig.webSocketConstructor = ws;
 
 const connectionString = process.env.DATABASE_URL;
 
+console.log(connectionString);
+
 if (!connectionString) {
   throw new Error('DATABASE_URL no está configurada');
 }
