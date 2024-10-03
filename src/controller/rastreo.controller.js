@@ -135,6 +135,21 @@ export const getOneRastreo = async (req, res, next) => {
       where: {
         id: parseInt(id),
       },
+      include: {
+        client: {
+          select: {
+            nombre: true,
+            apellidos: true,
+            email: true
+          }
+        },
+        gps: {
+          select: {
+            serial: true,
+            bodega: true
+          }
+        },
+      }
     });
 
     if (!rastreo) {
