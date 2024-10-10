@@ -27,11 +27,7 @@ model Client {
     provincia   String
     ciudad      String
     email       String @unique
-    instagram   String
-    x           String
-    cedula      String
-    ruc         String
-    razon_social    String
+    identificacion      String
     rastreo         Rastreo[]
 }
 

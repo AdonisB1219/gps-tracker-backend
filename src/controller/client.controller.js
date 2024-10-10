@@ -8,11 +8,7 @@ export const signUpClient = async (req, res, next) => {
       provincia,
       ciudad,
       email,
-      instagram,
-      x,
-      cedula,
-      ruc,
-      razonSocial,
+      identificacion,
     } = req.body;
 
     // validate emial
@@ -35,11 +31,7 @@ export const signUpClient = async (req, res, next) => {
         provincia,
         ciudad,
         email,
-        instagram,
-        x,
-        cedula,
-        ruc,
-        razon_social: razonSocial,
+        identificacion,
       },
     });
 
