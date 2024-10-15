@@ -47,6 +47,7 @@ model Rastreo {
     gps         Gps @relation(fields: [gpsId], references: [id])
     gpsId       Int
     referencia  String
+    estado     String
     celular     String
     saldo       Float
     fecha_inicio  DateTime
