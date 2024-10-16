@@ -6,9 +6,7 @@ export const signUpRastreo = async (req, res, next) => {
       clientId,
       gpsId,
       referencia,
-      estado,
-      celular,
-      saldo,
+      microchipId,
       fechaInicio,
       fechaFin,
     } = req.body;
@@ -31,9 +29,7 @@ export const signUpRastreo = async (req, res, next) => {
         clientId,
         gpsId,
         referencia,
-        estado,
-        celular,
-        saldo,
+        microchipId,
         fecha_inicio: fechaInicio,
         fecha_fin: fechaFin,
       },
@@ -81,6 +77,13 @@ export const getRastreo = async (req, res, next) => {
               bodega: true
             }
           },
+          microchip: {
+            select: {
+              celular: true,
+              estado: true,
+              saldo: true
+            }
+          }
         }
       });
       const totalAdmins = await prisma.rastreo.count({
@@ -119,6 +122,13 @@ export const getRastreo = async (req, res, next) => {
             bodega: true
           }
         },
+        microchip: {
+          select: {
+            celular: true,
+            estado: true,
+            saldo: true
+          }
+        }
       }
     });
 
@@ -151,6 +161,13 @@ export const getOneRastreo = async (req, res, next) => {
             bodega: true
           }
         },
+        microchip: {
+          select: {
+            celular: true,
+            saldo: true,
+            estado: true
+          }
+        }
       }
     });
 
@@ -173,10 +190,20 @@ export const updateRastreo = async (req, res, next) => {
     const { clientId,
       gpsId,
       referencia,
-      celular,
-      saldo,
+      microchipId,
       fechaInicio,
-      fechaFin, } = req.body;
+      fechaFin, saldo, estado} = req.body;
+    
+    if(saldo || estado) {
+      await prisma.microchip.update({
+        where: {
+            id: parseInt(id),
+          },
+      data: {
+        estado, saldo: parseFloat(saldo) 
+    },
+    });
+    }
 
     // validate emial
     const gpsExists = await prisma.rastreo.findFirst({
@@ -198,9 +225,8 @@ export const updateRastreo = async (req, res, next) => {
       data: {
         clientId,
         gpsId,
+        microchipId,
         referencia,
-        celular,
-        saldo,
         fecha_inicio: fechaInicio,
         fecha_fin: fechaFin,
       },

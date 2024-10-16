@@ -47,9 +47,18 @@ model Rastreo {
     gps         Gps @relation(fields: [gpsId], references: [id])
     gpsId       Int
     referencia  String
-    estado     String
-    celular     String
-    saldo       Float
+    microchip      Microchip @relation(fields: [microchipId], references: [id])
+    microchipId      Int
     fecha_inicio  DateTime
     fecha_fin     DateTime
+}
+
+model Microchip {
+    id          Int @id @default(autoincrement())
+    modelo      String
+    operadora   String
+    celular     String 
+    rastreo     Rastreo[]
+    estado      String
+    saldo       Float
 }
